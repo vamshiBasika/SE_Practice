@@ -1,0 +1,111 @@
+Kubernetes Practical: Nginx Deployment and Scaling
+Aim: To create an Nginx deployment in Kubernetes, increase and decrease the number of Pods, and access the Nginx web server.
+Step 1: Start Docker Desktop
+1. Open Docker Desktop.
+2. Wait until Docker Engine is running.
+3. Go to Settings → Kubernetes.
+4. Enable Kubernetes.
+5. Click Apply and wait until Kubernetes starts.
+Step 2: Open Command Prompt
+Press Windows + R, type cmd, and press Enter.
+
+Check Kubernetes installation:
+kubectl version --client
+
+
+Step 3: Check Kubernetes cluster
+kubectl get nodes
+
+
+Check that the node status is Ready.
+Step 4: Create Nginx deployment
+kubectl create deployment nginx-deployment --image=nginx
+
+
+This command creates an Nginx deployment with one Pod.
+Step 5: Check deployment
+kubectl get deployments
+
+
+Check running Pods:
+kubectl get pods
+
+
+Wait until the Pod status becomes Running.
+Step 6: Scale deployment to 3 Pods
+kubectl scale deployment nginx-deployment --replicas=3
+
+
+Check the Pods:
+kubectl get pods
+
+
+Now three Nginx Pods should be running.
+Step 7: Scale deployment to 2 Pods
+kubectl scale deployment nginx-deployment --replicas=2
+
+
+Check again:
+kubectl get pods
+
+
+Now two Nginx Pods should be running.
+Step 8: Expose Nginx deployment
+kubectl expose deployment nginx-deployment --type=NodePort --port=80
+
+
+Check the service:
+kubectl get services
+
+
+Step 9: Access Nginx in browser
+Execute:
+kubectl port-forward service/nginx-deployment 8080:80
+
+
+Keep the Command Prompt open.
+
+Open your browser and enter:
+http://localhost:8080
+
+
+You should see the Nginx welcome page.
+Step 10: Delete deployment and service
+Open another Command Prompt and execute:
+kubectl delete service nginx-deployment
+
+
+kubectl delete deployment nginx-deployment
+
+
+All commands for quick practical revision
+kubectl version --client
+
+kubectl get nodes
+
+kubectl create deployment nginx-deployment --image=nginx
+
+kubectl get deployments
+
+kubectl get pods
+
+kubectl scale deployment nginx-deployment --replicas=3
+
+kubectl get pods
+
+kubectl scale deployment nginx-deployment --replicas=2
+
+kubectl get pods
+
+kubectl expose deployment nginx-deployment --type=NodePort --port=80
+
+kubectl get services
+
+kubectl port-forward service/nginx-deployment 8080:80
+
+kubectl delete service nginx-deployment
+
+kubectl delete deployment nginx-deployment
+
+
+Expected final result: Nginx runs successfully, and you can access its welcome page at http://localhost:8080.
