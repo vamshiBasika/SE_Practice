@@ -1,0 +1,81 @@
+Docker Multiple Container Application using Docker Compose
+Aim: To run an application using multiple Docker containers with Docker Compose.
+
+We will create two containers:
+1. WordPress – runs the website.
+2. MySQL – stores website data.
+Step 1: Create a project folder
+Open CMD or terminal:
+mkdir DockerMultiContainer
+cd DockerMultiContainer
+
+
+Step 2: Create docker-compose.yml
+Inside the folder, create a file named exactly docker-compose.yml.
+
+Add this code:
+services:
+  wordpress:
+    image: wordpress:latest
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: user
+      WORDPRESS_DB_PASSWORD: password
+      WORDPRESS_DB_NAME: wordpress
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
+
+
+Step 3: Start multiple containers
+Run:
+docker compose up -d
+
+
+This command downloads the required images and starts both containers in the background.
+Step 4: Check running containers
+docker compose ps
+
+
+You should see two services:
+- wordpress
+- db
+Step 5: Open the application
+Open your browser:
+http://localhost:8080
+
+
+The WordPress setup page should appear.
+Step 6: View container logs
+docker compose logs
+
+
+To view logs of only WordPress:
+docker compose logs wordpress
+
+
+Step 7: Stop the containers
+docker compose down
+
+
+This stops and removes the containers and network. The database volume remains saved.
+
+To also delete the database volume:
+docker compose down -v
+
+
+Warning: The -v option deletes the stored database data.
