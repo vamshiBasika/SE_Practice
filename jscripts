@@ -1,0 +1,58 @@
+
+pipeline {
+    agent any
+
+    tools {
+        maven 'Maven'
+        jdk 'JDK'
+    }
+
+    stages {
+
+        // Stage 1: Build
+        stage('Build') {
+            steps {
+                echo 'Building Maven Web Application'
+                bat 'mvn clean package'
+            }
+        }
+
+        // Stage 2: Test
+        stage('Test') {
+            steps {
+                echo 'Running Test Cases'
+                bat 'mvn test'
+            }
+        }
+
+        // Stage 3: Deploy
+        stage('Deploy') {
+            steps {
+                echo 'Deploying Application to Tomcat'
+
+                deploy adapters: [
+                    tomcat9(
+                        credentialsId: 'tomcat-credentials',
+                        url: 'http://localhost:8080'
+                    )
+                ],
+                contextPath: 'MyWebProject',
+                war: 'target/*.war'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Application deployed successfully!'
+        }
+
+        failure {
+            echo 'Pipeline execution failed!'
+        }
+
+        always {
+            echo 'Pipeline execution completed.'
+        }
+    }
+}
